@@ -11,8 +11,10 @@ app.use(router);
 
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server is running on port ${process.env.PORT}!`);
+    mongoose.connect(process.env.MONGO_URI!).then(() => console.log('Connected to MongoDB!'))
 }).on('error', (err: Error) => {
     console.log(err);
     process.exit(1);
-})
+}).on('listening', () => {
+    console.log(`Server is running on port ${process.env.PORT}!`);
+});

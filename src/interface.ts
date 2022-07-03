@@ -5,3 +5,10 @@ export interface User {
     salt: string;
     administrator: boolean;
 }
+
+export interface Post {
+    title: string;
+    author: string;
+    images: Array<string>;
+    subject: string;
+}
