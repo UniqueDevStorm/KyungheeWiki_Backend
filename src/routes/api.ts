@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import scrypt from 'scrypt';
+import * as crypto from "crypto";
 
 import { User, Post } from "../models";
 
@@ -13,26 +13,21 @@ apiRouter.get("/", (req, res) => {
 });
 
 apiRouter.post("/createUser", async (req, res) => {
-  const generateSalt = () => {
-    const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result1= ' ';
-    const charactersLength = characters.length;
-    for ( let i = 0; i < 32; i++ ) {
-        result1 += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result1;
-  }
-  const salt = generateSalt();
-  const password = (await scrypt.hash(req.body.password, {"N":1048576,"r":8,"p":1}, 64, salt)).toString("hex");
-  await User.create({
-    name: req.body.name,
+  const salt = crypto.randomBytes(128).toString("base64");
+  const password = crypto
+    .createHash("sha512")
+    .update(req.body.password + salt)
+    .digest("hex");
+  const createUser = await User.create({
+    username: req.body.username,
     email: req.body.email,
-    salt,
+    salt: salt,
     password: password,
-  })
-  return res.send({
-    Hello: "World!",
+    confirmed: false,
+    administrator: false,
+    boardMember: false,
   });
+  res.send(createUser);
 });
 
 apiRouter.get("/getUsers", async (req, res) => {
