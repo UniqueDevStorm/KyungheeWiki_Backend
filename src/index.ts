@@ -3,17 +3,16 @@ import express, { Express } from "express";
 import mongoose from "mongoose";
 
 import router from "./routes";
-
-require("dotenv").config();
+import config from '../config/config.json';
 
 const app: Express = express();
 app.use(express.json());
 app.use(router);
 
 app
-  .listen(process.env.PORT, () => {
+  .listen(config.PORT, () => {
     mongoose
-      .connect(process.env.MONGO_URI!)
+      .connect(config.MONGODB_URI)
       .then(() => console.log("Connected to MongoDB!"));
   })
   .on("error", (err: Error) => {
@@ -21,5 +20,5 @@ app
     process.exit(1);
   })
   .on("listening", () => {
-    console.log(`Server is running on port ${process.env.PORT}!`);
+    console.log(`Server is running on port ${config.PORT}!`);
   });

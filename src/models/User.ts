@@ -3,6 +3,10 @@ import { User } from "../interface";
 
 const userSchema = new mongoose.Schema(
   {
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     username: {
       type: String,
       required: true,
@@ -35,6 +39,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: false,
     },
+    token: {
+        type: String,
+        required: true,
+    }
   },
   {
     versionKey: false,

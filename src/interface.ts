@@ -3,7 +3,10 @@ export interface User {
   email: string;
   password: string;
   salt: string;
+  confirmed: boolean;
   administrator: boolean;
+  boardMember: boolean;
+  token: string;
 }
 
 export interface Post {
